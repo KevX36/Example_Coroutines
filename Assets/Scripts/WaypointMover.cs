@@ -47,20 +47,43 @@ public class WaypointMover : MonoBehaviour
         
 
     }
-    
+    public bool PingPong;
     IEnumerator MoveBetweenWayPoints()
     {
 
-        while (Vector3.Distance(rb.position, _waypoints[1]) > 0.7f)
+        while (true)
         {
-            Debug.Log("Moving");
-            rb.MovePosition(Vector3.MoveTowards(rb.position, _waypoints[1], _speed * Time.fixedDeltaTime));
+            for (int i = 1; i < _waypoints.Count; i++)
+            {
+                while (Vector3.Distance(rb.position, _waypoints[i]) > 0.9f)
+                {
+                    Debug.Log("Moving");
+                    rb.MovePosition(Vector3.MoveTowards(rb.position, _waypoints[i], _speed * Time.fixedDeltaTime));
+                    yield return null;
+                }
 
+                yield return new WaitForSecondsRealtime(1f);
+            }
+            if (PingPong)
+            {
+                for (int i = _waypoints.Count - 1; i > 0; i--)
+                {
+                    while (Vector3.Distance(rb.position, _waypoints[i - 1]) > 0.9f)
+                    {
+                        Debug.Log("Moving");
+                        rb.MovePosition(Vector3.MoveTowards(rb.position, _waypoints[i - 1], _speed * Time.fixedDeltaTime));
+                        yield return null;
+                    }
+
+                    yield return new WaitForSecondsRealtime(1f);
+                }
+            }
+            
+
+            yield return new WaitForSecondsRealtime(1f);
         }
 
 
-
-        yield return new WaitForSecondsRealtime(1f);
 
 
 
