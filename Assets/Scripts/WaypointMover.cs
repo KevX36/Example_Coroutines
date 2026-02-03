@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -40,10 +41,29 @@ public class WaypointMover : MonoBehaviour
         if (_waypoints.Count > 1)
         {
             //TODO: once MoveBetweenWayPoints method exists, uncomment the line below. 
-            //StartCoroutine(MoveBetweenWayPoints());
+            StartCoroutine(MoveBetweenWayPoints());
         }
         
         
+
+    }
+    
+    IEnumerator MoveBetweenWayPoints()
+    {
+
+        while (Vector3.Distance(rb.position, _waypoints[1]) > 0.7f)
+        {
+            Debug.Log("Moving");
+            rb.MovePosition(Vector3.MoveTowards(rb.position, _waypoints[1], _speed * Time.fixedDeltaTime));
+
+        }
+
+
+
+        yield return new WaitForSecondsRealtime(1f);
+
+
+
 
     }
 
